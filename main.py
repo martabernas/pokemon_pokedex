@@ -1,10 +1,14 @@
 from bs4 import BeautifulSoup
 import re
+import requests
 
 
 def main():
-    with open("pokemon_database.html", encoding="utf8") as fp:
-        soup = BeautifulSoup(fp, "html.parser")
+
+    url = "https://pokemondb.net/pokedex/game/firered-leafgreen"
+    req = requests.get(url)
+
+    soup = BeautifulSoup(req.content, "html.parser")
     names = []
     numbers = []
     for tag in soup.find_all(class_="ent-name"):
