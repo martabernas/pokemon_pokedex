@@ -5,7 +5,6 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 
-
 @app.route("/")
 def main():
     url = "https://pokemondb.net/pokedex/game/firered-leafgreen"
@@ -21,6 +20,7 @@ def main():
                   "ghost": "duch", "steel": "stalowy", "fire": "ognisty", "water": "wodny",
                   "grass": "trawiasty", "electric": "elektryczny", "psychic": "psychiczny",
                   "ice": "lodowy", "dragon": "smok", "dark": "mroczny"}
+    images_urls = []
 
     for tag in soup.find_all(class_="ent-name"):
         names.append(tag.string)
@@ -34,4 +34,24 @@ def main():
         types_pl.append(
             [types_dict[pokemon_type.string.casefold()] for pokemon_type in pokemon_types])
 
-    return render_template("index.html", names=names, numbers=numbers, types=types_pl, zip=zip)
+    for tag in soup.find_all(class_="img-fixed img-sprite img-sprite-v6"):
+        images_urls.append(tag["src"])
+
+    return render_template("index.html", names=names, numbers=numbers, types=types_pl,
+                           images=images_urls, zip=zip)
+
+@app.route("/<name>")
+def pokemon_info(name):
+    name = name.capitalize()
+    base_url = "https://pokemondb.net/"
+    url = "https://pokemondb.net/pokedex/game/firered-leafgreen"
+    req = requests.get(url)
+    images_urls = []
+    soup = BeautifulSoup(req.content, "html.parser")
+    new_url = base_url + soup.find(string=name).find_parent()['href']
+    req = requests.get(new_url)
+    soup = BeautifulSoup(req.content, "html.parser")
+    img_src = soup.find(attrs={"data-title": f"{name} official artwork"})['href']
+
+    return render_template("pokemon_info.html", image=img_src)
+

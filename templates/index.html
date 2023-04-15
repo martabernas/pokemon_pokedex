@@ -1,31 +1,18 @@
 <table>
     <thead>
-        <th>
-            ID
-        </th>
-        <th>
-            Nazwa
-        </th>
-        <th>
-            Typ
-        </th>
+        <th>Wygląd</th>
+        <th>ID</th>
+        <th>Nazwa</th>
+        <th>Typ</th>
     </thead>
     <tbody>
-    {% for id, name, type_ in zip(numbers, names, types) %}
+    {% for image, id, name, type_ in zip(images, numbers, names, types) %}
         <tr>
-            <td>
-                {{id}}
-            </td>
-            <td>
-                {{name}}
-            </td>
-            <td>
-                {{', '.join(type_)}}
-            </td>
+            <td><img src="{{image}}" alt="{{name}} image"></td>
+            <td>{{id}}</td>
+            <td><a href="{{url_for('pokemon_info', name=name.lower())}}">{{name}}</a></td>
+            <td>{{", ".join(type_)}}</td>
         </tr>
     {% endfor %}
-
     </tbody>
-
-
 </table>
