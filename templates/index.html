@@ -1,0 +1,31 @@
+<table>
+    <thead>
+        <th>
+            ID
+        </th>
+        <th>
+            Nazwa
+        </th>
+        <th>
+            Typ
+        </th>
+    </thead>
+    <tbody>
+    {% for id, name, type_ in zip(numbers, names, types) %}
+        <tr>
+            <td>
+                {{id}}
+            </td>
+            <td>
+                {{name}}
+            </td>
+            <td>
+                {{', '.join(type_)}}
+            </td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+
+
+</table>
