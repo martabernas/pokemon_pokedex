@@ -1,1 +1,16 @@
 <img src="{{image}}" alt="image" width="500">
+
+<table>
+    <thead>
+    {% for each in features %}
+        <th>{{each[0]}}</th>
+    {% endfor %}
+    </thead>
+    <tbody>
+        <tr>
+            {% for each in features %}
+                <td>{{each[1]}}</td>
+            {% endfor %}
+        </tr>
+    </tbody>
+</table>

@@ -46,12 +46,24 @@ def pokemon_info(name):
     base_url = "https://pokemondb.net/"
     url = "https://pokemondb.net/pokedex/game/firered-leafgreen"
     req = requests.get(url)
-    images_urls = []
     soup = BeautifulSoup(req.content, "html.parser")
+
     new_url = base_url + soup.find(string=name).find_parent()['href']
     req = requests.get(new_url)
     soup = BeautifulSoup(req.content, "html.parser")
     img_src = soup.find(attrs={"data-title": f"{name} official artwork"})['href']
 
-    return render_template("pokemon_info.html", image=img_src)
+    features = []
 
+
+    stats_row = soup.find("h2", string="Base stats").find_next_sibling().find_next("th")
+
+    while stats_row.string is not None:
+        features.append([stats_row.string, stats_row.find_next("td").string])
+        stats_row = stats_row.find_next("th")
+
+
+    return render_template("pokemon_info.html", image=img_src, features=features)
+
+# if __name__ == "__main__":
+#     pokemon_info("bulbasaur")
